@@ -262,7 +262,6 @@ def analyze_line(line):
     found_line = False
     first_token_i = -1
     cur_i = 0
-    num_todos += line.count("TODO")
     if inside_block:
         if not line_counted:
             num_comment_lines += 1
@@ -304,6 +303,7 @@ def analyze_line(line):
 for line_f in file_content_line_splitted:
     line = line_f
     line_counted = False
+    num_todos += line.count("TODO")
     line = analyze_line(line)
     
 '''inside_line = False
