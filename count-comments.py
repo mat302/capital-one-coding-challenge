@@ -283,7 +283,8 @@ for line_f in file_content_line_splitted:
         num_multi_line_comments += 1
         inside_block = True
     elif found_line:
-        num_comment_lines += 1
+        if not line_counted:
+            num_comment_lines += 1
         num_single_line_comments += 1
     
 '''inside_line = False
