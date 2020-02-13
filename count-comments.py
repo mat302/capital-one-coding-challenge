@@ -244,7 +244,10 @@ found_line = False
 line_counted = False
 cur_i = 0
 
+
 def analyze_line(line):
+    '''Function that analyzes lines
+    or partial lines recursively'''
     global num_lines
     global num_todos
     global num_comment_lines
@@ -298,77 +301,16 @@ def analyze_line(line):
         if not line_counted:
             num_comment_lines += 1
         num_single_line_comments += 1
-    return line, first_token_i, inside_block, inside_block_right, found_block, found_line, line_counted, cur_i
+    return line
 
+# Analyze each line
 for line_f in file_content_line_splitted:
     line = line_f
     line_counted = False
     num_todos += line.count("TODO")
     line = analyze_line(line)
-    
-'''inside_line = False
-inside_block = False
-break_loop = False
-current_block_right = ""
-for line in file_content_line_splitted:
-    i = 0
-    while i < len(line):
-        i_check = i
-        if inside_block:
-            j = 0
-            while j < len(current_block_right):
-                if i < len(line) and
-                line[i] == current_block_right[j]:
-                    j += 1
-                    i += 1
-                else:
-                    break
-            else:
-                num_comment_lines += 1
-                num_multi_line_comments += 1
-                num_multi_line_comments_lines += 1
-                inside_block = False
-                current_block_right = right
-                i = i_check
-                break
-        else:
-            for tok_obj in language_comment_tokens.single:
-                token = tok_obj.token
-                i = i_check
-                j = 0
-                while j < len(token):
-                    if i < len(line) and
-                    line[i] == token[j]:
-                        j += 1
-                        i += 1
-                    else:
-                        break
-                else:
-                    num_comment_lines += 1
-                    num_single_line_comments += 1
-                    inside_line = True
-                    break
-            for tok_obj in language_comment_tokens.multi:
-                if inside_line:
-                    break
-                left = tok_obj.left_token
-                right = tok_obj.right_token
-                i = i_check
-                j = 0
-                while j < len(left):
-                    if i < len(line) and
-                    line[i] == left[j]:
-                        j += 1
-                        i += 1
-                    else:
-                        break
-                else:
-                    num_comment_lines += 1
-                    num_multi_line_comments += 1
-                    num_multi_line_comments_lines += 1
-                    inside_block = True
-                    break'''
 
+# Print the results
 print("\n")
 print("Total # of lines: " + str(num_lines))
 print("Total # of comment lines: " +
