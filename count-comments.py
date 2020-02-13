@@ -243,17 +243,21 @@ inside_block = False
 inside_block_right = ""
 found_block = False
 found_line = False
+line_counted = False
 cur_i = 0
 for line_f in file_content_line_splitted:
     line = line_f
     found_block = False
     found_line = False
+    line_counted = False
     first_token_i = -1
     cur_i = 0
     num_todos += line.count("TODO")
     if inside_block:
-        num_comment_lines += 1
-        num_multi_line_comments_lines += 1
+        if not line_counted:
+            num_comment_lines += 1
+            num_multi_line_comments_lines += 1
+            line_counted = True
         cur_i = line.find(inside_block_right)
         if cur_i != -1:
             inside_block = False
@@ -272,9 +276,11 @@ for line_f in file_content_line_splitted:
                 inside_block_right = tok_obj.right_token
                 found_block = True
     if found_block:
-        num_comment_lines += 1
+        if not line_counted:
+            num_comment_lines += 1
+            num_multi_line_comments_lines += 1
+            line_counted = True
         num_multi_line_comments += 1
-        num_multi_line_comments_lines += 1
         inside_block = True
     elif found_line:
         num_comment_lines += 1
