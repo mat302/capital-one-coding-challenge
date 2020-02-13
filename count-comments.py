@@ -246,8 +246,8 @@ cur_i = 0
 
 
 def analyze_line(line):
-    '''Function that analyzes lines
-    or partial lines recursively'''
+    """Function that analyzes lines
+    or partial lines recursively"""
     global num_lines
     global num_todos
     global num_comment_lines
