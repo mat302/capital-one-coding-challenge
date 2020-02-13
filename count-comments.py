@@ -236,8 +236,6 @@ num_comment_lines = 0
 num_single_line_comments = 0
 num_multi_line_comments_lines = 0
 num_multi_line_comments = 0
-
-
 first_token_i = -1
 inside_block = False
 inside_block_right = ""
@@ -245,11 +243,23 @@ found_block = False
 found_line = False
 line_counted = False
 cur_i = 0
-for line_f in file_content_line_splitted:
-    line = line_f
+
+def analyze_line(line):
+    global num_lines
+    global num_todos
+    global num_comment_lines
+    global num_single_line_comments
+    global num_multi_line_comments_lines
+    global num_multi_line_comments
+    global first_token_i
+    global inside_block
+    global inside_block_right
+    global found_block
+    global found_line
+    global line_counted
+    global cur_i
     found_block = False
     found_line = False
-    line_counted = False
     first_token_i = -1
     cur_i = 0
     num_todos += line.count("TODO")
@@ -268,6 +278,7 @@ for line_f in file_content_line_splitted:
             if cur_i != -1 and (first_token_i == -1 or cur_i < first_token_i):
                 first_token_i = cur_i
                 found_line = True
+                found_block = False
     if not inside_block:
         for tok_obj in language_comment_tokens.multi:
             cur_i = line.find(tok_obj.left_token)
@@ -275,6 +286,7 @@ for line_f in file_content_line_splitted:
                 first_token_i = cur_i
                 inside_block_right = tok_obj.right_token
                 found_block = True
+                found_line = False
     if found_block:
         if not line_counted:
             num_comment_lines += 1
@@ -282,10 +294,17 @@ for line_f in file_content_line_splitted:
             line_counted = True
         num_multi_line_comments += 1
         inside_block = True
+        analyze_line(line[first_token_i + len(inside_block_right):])
     elif found_line:
         if not line_counted:
             num_comment_lines += 1
         num_single_line_comments += 1
+    return line, first_token_i, inside_block, inside_block_right, found_block, found_line, line_counted, cur_i
+
+for line_f in file_content_line_splitted:
+    line = line_f
+    line_counted = False
+    line = analyze_line(line)
     
 '''inside_line = False
 inside_block = False
